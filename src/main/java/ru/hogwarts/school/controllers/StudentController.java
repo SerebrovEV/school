@@ -32,7 +32,7 @@ public class StudentController {
         return ResponseEntity.ok(findStudent);
     }
 
-    @GetMapping
+    @GetMapping("/all")
     public ResponseEntity<Collection<Student>> getAllFaculties() {
         return ResponseEntity.ok(studentService.getAllStudents());
     }
@@ -55,12 +55,11 @@ public class StudentController {
         return ResponseEntity.ok(deleteStudent);
     }
 
-    @GetMapping("/age")
-    public ResponseEntity<Collection<Student>> findStudentSByAge(@RequestParam("age") int age) {
-        Collection<Student> findStudents = studentService.findStudentsByAge(age);
-        if (findStudents == null) {
-            ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+    @GetMapping
+    public ResponseEntity<Collection<Student>> findStudentSByAge(@RequestParam(required = false) int age) {
+        if (age <= 0) {
+            return  ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
-        return ResponseEntity.ok(findStudents);
+        return ResponseEntity.ok(studentService.findStudentsByAge(age));
     }
     }
