@@ -27,7 +27,7 @@ public class StudentController {
     public ResponseEntity<Student> getFacultyInfo(@PathVariable Long id) {
         Student findStudent = studentService.findStudent(id);
         if (findStudent == null) {
-            ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+            return  ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
         return ResponseEntity.ok(findStudent);
     }
@@ -41,18 +41,15 @@ public class StudentController {
     public ResponseEntity<Student> editFaculty(@RequestBody Student student) {
         Student editStudent = studentService.editStudent(student);
         if (editStudent == null) {
-            ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+            return  ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
         return ResponseEntity.ok(editStudent);
     }
 
     @DeleteMapping("{id}")
-    public ResponseEntity<Student> deleteFaculty(@PathVariable Long id) {
-        Student deleteStudent = studentService.deleteStudent(id);
-        if (deleteStudent == null) {
-            ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
-        }
-        return ResponseEntity.ok(deleteStudent);
+    public ResponseEntity deleteFaculty(@PathVariable Long id) {
+        studentService.deleteStudent(id);
+        return ResponseEntity.ok().build();
     }
 
     @GetMapping
