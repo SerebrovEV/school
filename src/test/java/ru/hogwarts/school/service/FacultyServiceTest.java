@@ -11,11 +11,10 @@ import ru.hogwarts.school.services.FacultyService;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 public class FacultyServiceTest {
@@ -34,17 +33,22 @@ public class FacultyServiceTest {
 
         when(facultyRepository.findAll()).thenReturn(List.of());
         assertThat(out.getAllFaculties()).isEmpty();
+        verify(facultyRepository,only()).findAll();
 
         when(facultyRepository.save(any())).thenReturn(faculty1);
         assertThat(out.createFaculty(faculty1)).isEqualTo(faculty1);
+        verify(facultyRepository, times(1)).save(any());
 
         when(facultyRepository.findById(1L)).thenReturn(Optional.of(faculty1));
         assertThat(out.findFaculty(1L)).isEqualTo(faculty1);
+        verify(facultyRepository, times(1)).findById(1L);
 
         when(facultyRepository.save(faculty1)).thenReturn(faculty2);
         assertThat(out.editFaculty(faculty1)).isEqualTo(faculty2);
+        verify(facultyRepository, times(2)).save(faculty1);
 
         when(facultyRepository.findByColor(any())).thenReturn(List.of(faculty1, faculty2));
         assertThat(out.findFacultyByColor("test")).isEqualTo(List.of(faculty1, faculty2));
+        verify(facultyRepository,times(1)).findByColor(any());
     }
 }
