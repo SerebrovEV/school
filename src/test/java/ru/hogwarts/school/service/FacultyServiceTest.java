@@ -1,12 +1,16 @@
 package ru.hogwarts.school.service;
 
+import org.assertj.core.internal.bytebuddy.dynamic.DynamicType;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.boot.r2dbc.OptionsCapableConnectionFactory;
 import ru.hogwarts.school.models.Faculty;
+import ru.hogwarts.school.models.Student;
 import ru.hogwarts.school.repositories.FacultyRepository;
+import ru.hogwarts.school.repositories.StudentRepository;
 import ru.hogwarts.school.services.FacultyService;
 
 import java.util.List;
@@ -22,6 +26,7 @@ public class FacultyServiceTest {
     @Mock
     private FacultyRepository facultyRepository;
 
+
     @InjectMocks
     private FacultyService out;
 
@@ -30,6 +35,7 @@ public class FacultyServiceTest {
     public void positiveTest() {
         Faculty faculty1 = new Faculty();
         Faculty faculty2 = new Faculty();
+
 
         when(facultyRepository.findAll()).thenReturn(List.of());
         assertThat(out.getAllFaculties()).isEmpty();
@@ -47,8 +53,9 @@ public class FacultyServiceTest {
         assertThat(out.editFaculty(faculty1)).isEqualTo(faculty2);
         verify(facultyRepository, times(2)).save(faculty1);
 
-        when(facultyRepository.findByColor(any())).thenReturn(List.of(faculty1, faculty2));
-        assertThat(out.findFacultyByColor("test")).isEqualTo(List.of(faculty1, faculty2));
-        verify(facultyRepository,times(1)).findByColor(any());
+        when(facultyRepository.findByColorIgnoreCaseOrNameIgnoreCase(anyString(),anyString())).thenReturn(faculty1);
+        assertThat(out.findFacultyByColorOrName("test","test")).isEqualTo(faculty1);
+        verify(facultyRepository,times(1)).findByColorIgnoreCaseOrNameIgnoreCase(anyString(), anyString());
+
     }
 }

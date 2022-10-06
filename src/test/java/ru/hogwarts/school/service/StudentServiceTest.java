@@ -15,7 +15,6 @@ import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -47,8 +46,8 @@ public class StudentServiceTest {
         assertThat(out.editStudent(student1)).isEqualTo(student2);
         verify(studentRepository, times(2)).save(student1);
 
-        when(studentRepository.findByAge(anyInt())).thenReturn(List.of(student1, student2));
-        assertThat(out.findStudentsByAge(22)).isEqualTo(List.of(student1, student2));
-        verify(studentRepository,times(1)).findByAge(anyInt());
+        when(studentRepository.findStudentsByFaculty_Id(anyLong())).thenReturn(List.of(student1, student2));
+        assertThat(out.getAllStudentsOnFaculty(2L)).isEqualTo(List.of(student1, student2));
+        verify(studentRepository,times(1)).findStudentsByFaculty_Id(anyLong());
     }
 }
