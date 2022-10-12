@@ -1,7 +1,7 @@
 package ru.hogwarts.school.services;
 
 import org.springframework.stereotype.Service;
-import ru.hogwarts.school.models.Faculty;
+import ru.hogwarts.school.exception.StudentNotFoundException;
 import ru.hogwarts.school.models.Student;
 import ru.hogwarts.school.repositories.FacultyRepository;
 import ru.hogwarts.school.repositories.StudentRepository;
@@ -13,11 +13,9 @@ import java.util.List;
 @Service
 public class StudentService {
     private final StudentRepository studentRepository;
-    private final FacultyRepository facultyRepository;
 
     public StudentService(StudentRepository studentRepository, FacultyRepository facultyRepository) {
         this.studentRepository = studentRepository;
-        this.facultyRepository = facultyRepository;
     }
 
     public Student createStudent(Student student) {

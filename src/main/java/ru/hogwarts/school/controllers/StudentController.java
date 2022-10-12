@@ -34,9 +34,9 @@ public class StudentController {
     }
 
     @GetMapping("/all")
-    public ResponseEntity<Collection<Student>> getAllStudents(@RequestParam(required = false) Long id) {
-        if (id != null) {
-            return ResponseEntity.ok(studentService.getAllStudentsOnFaculty(id));
+    public ResponseEntity<Collection<Student>> getAllStudents(@RequestParam(required = false) Long idFaculty) {
+        if (idFaculty != null) {
+            return ResponseEntity.ok(studentService.getAllStudentsOnFaculty(idFaculty));
         }
         return ResponseEntity.ok(studentService.getAllStudents());
     }
@@ -58,11 +58,11 @@ public class StudentController {
     }
 
     @GetMapping
-    public ResponseEntity<Collection<Student>> findStudentSByAge(@RequestParam int min,
-                                                                 @RequestParam int max) {
+    public ResponseEntity<Collection<Student>> findStudentSByAge(@RequestParam int minAge,
+                                                                 @RequestParam int maxAge) {
 
-        if (min > 0 && max >= min) {
-            return ResponseEntity.ok(studentService.findByAgeBetween(min, max));
+        if (minAge > 0 && maxAge >= minAge) {
+            return ResponseEntity.ok(studentService.findByAgeBetween(minAge, maxAge));
 
         } else {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();

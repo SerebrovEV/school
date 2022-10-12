@@ -54,13 +54,16 @@ public class FacultyController {
     }
 
     @GetMapping
-    public ResponseEntity findFacultiesByColorOrName(@RequestParam(required = false) Long id,
-                                                     @RequestParam(required = false) String color,
-                                                     @RequestParam(required = false) String name) {
-        if (id != null) {
-            return ResponseEntity.ok(facultyService.findFacultiesByStudents(id));
+    public ResponseEntity findFaculties(@RequestParam(required = false) Long idStudents,
+                                        @RequestParam(required = false) String color,
+                                        @RequestParam(required = false) String name) {
+        if (idStudents != null) {
+            return ResponseEntity.ok(facultyService.findFacultiesByStudents(idStudents));
         }
-        return ResponseEntity.ok(facultyService.findFacultyByColorOrName(color, name));
+        if (color != null || name != null) {
+            return ResponseEntity.ok(facultyService.findFacultyByColorOrName(color, name));
+        }
+        return ResponseEntity.ok().body("Введите данные!");
     }
 
 
