@@ -134,16 +134,17 @@ public class FacultyControllerTest {
         faculty.setColor(color);
 
         Faculty faculty2 = new Faculty();
-        faculty.setId(id2);
-        faculty.setName(name2);
-        faculty.setColor(color2);
+        faculty2.setId(id2);
+        faculty2.setName(name2);
+        faculty2.setColor(color2);
 
 
         when(facultyRepository.findAll()).thenReturn(List.of(faculty, faculty2));
         mockMvc.perform(MockMvcRequestBuilders
                         .get("/faculty/all")
                         .accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk());
+                .andExpect(status().isOk())
+                .andExpect(content().json(objectMapper.writeValueAsString(List.of(faculty, faculty2))));
     }
 
 
@@ -154,12 +155,24 @@ public class FacultyControllerTest {
         final String name = "test";
         final String color = "testColor";
 
+        final Long id2 = 2L;
+        final String name2 = "test2";
+        final String color2 = "testColor2";
+
+
         Faculty faculty = new Faculty();
         faculty.setId(id);
         faculty.setName(name);
         faculty.setColor(color);
 
-        when(facultyRepository.findByColorIgnoreCaseOrNameIgnoreCase(color, name)).thenReturn(Optional.of(faculty));
+        Faculty faculty2 = new Faculty();
+        faculty2.setId(id2);
+        faculty2.setName(name2);
+        faculty2.setColor(color2);
+
+
+
+        when(facultyRepository.findByColorIgnoreCaseOrNameIgnoreCase(color, name)).thenReturn(List.of(faculty, faculty2));
 
         mockMvc.perform(MockMvcRequestBuilders
                         .get("/faculty")
@@ -168,6 +181,6 @@ public class FacultyControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(content().json(objectMapper.writeValueAsString(faculty)));
+                .andExpect(content().json(objectMapper.writeValueAsString(List.of(faculty, faculty2))));
     }
 }

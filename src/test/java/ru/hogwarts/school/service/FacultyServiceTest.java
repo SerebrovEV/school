@@ -53,8 +53,8 @@ public class FacultyServiceTest {
         assertThat(out.editFaculty(faculty1)).isEqualTo(faculty2);
         verify(facultyRepository, times(2)).save(faculty1);
 
-        when(facultyRepository.findByColorIgnoreCaseOrNameIgnoreCase(anyString(),anyString())).thenReturn(Optional.of(faculty1));
-        assertThat(out.findFacultyByColorOrName("test","test")).isEqualTo(faculty1);
+        when(facultyRepository.findByColorIgnoreCaseOrNameIgnoreCase(anyString(),anyString())).thenReturn(List.of(faculty1));
+        assertThat(out.findFacultyByColorOrName("test","test")).isEqualTo(List.of(faculty1));
         verify(facultyRepository,times(1)).findByColorIgnoreCaseOrNameIgnoreCase(anyString(), anyString());
 
     }
