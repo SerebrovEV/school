@@ -53,17 +53,18 @@ public class FacultyController {
         return ResponseEntity.ok().build();
     }
 
+    @GetMapping("/student")
+    public ResponseEntity findFacultiesByStudent(@RequestParam Long idStudent) {
+            return ResponseEntity.ok(facultyService.findFacultiesByStudents(idStudent));
+    }
+
     @GetMapping
-    public ResponseEntity findFaculties(@RequestParam(required = false) Long idStudents,
-                                        @RequestParam(required = false) String color,
-                                        @RequestParam(required = false) String name) {
-        if (idStudents != null) {
-            return ResponseEntity.ok(facultyService.findFacultiesByStudents(idStudents));
-        }
+    public ResponseEntity<Faculty> findFaculties(@RequestParam(required = false) String color,
+                                                 @RequestParam(required = false) String name) {
         if (color != null || name != null) {
             return ResponseEntity.ok(facultyService.findFacultyByColorOrName(color, name));
         }
-        return ResponseEntity.ok().body("Введите данные!");
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
     }
 
 
