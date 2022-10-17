@@ -6,6 +6,7 @@ import javax.persistence.*;
 import java.util.Collection;
 import java.util.Objects;
 @Entity
+//@Table(name = "faculties") наименование таблицы в БД
 public class Faculty {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

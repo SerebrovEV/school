@@ -13,7 +13,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import ru.hogwarts.school.controllers.FacultyController;
 import ru.hogwarts.school.models.Faculty;
-import ru.hogwarts.school.models.Student;
+
 import ru.hogwarts.school.repositories.AvatarRepository;
 import ru.hogwarts.school.repositories.FacultyRepository;
 import ru.hogwarts.school.repositories.StudentRepository;
@@ -21,7 +21,6 @@ import ru.hogwarts.school.services.AvatarService;
 import ru.hogwarts.school.services.FacultyService;
 import ru.hogwarts.school.services.StudentService;
 
-import java.net.http.HttpClient;
 import java.util.List;
 import java.util.Optional;
 
@@ -172,12 +171,11 @@ public class FacultyControllerTest {
 
 
 
-        when(facultyRepository.findByColorIgnoreCaseOrNameIgnoreCase(color, name)).thenReturn(List.of(faculty, faculty2));
+        when(facultyRepository.findByColorIgnoreCaseOrNameIgnoreCase(anyString(), anyString())).thenReturn(List.of(faculty, faculty2));
 
         mockMvc.perform(MockMvcRequestBuilders
                         .get("/faculty")
-                        .queryParam("color", color)
-                        .queryParam("name", name)
+                        .queryParam("colorOrName", color)
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())

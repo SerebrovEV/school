@@ -35,7 +35,9 @@ public class FacultyServiceTest {
     public void positiveTest() {
         Faculty faculty1 = new Faculty();
         Faculty faculty2 = new Faculty();
-
+        faculty1.setId(1L);
+        faculty1.setName("test");
+        faculty1.setColor("testColor");
 
         when(facultyRepository.findAll()).thenReturn(List.of());
         assertThat(out.getAllFaculties()).isEmpty();
@@ -54,7 +56,7 @@ public class FacultyServiceTest {
         verify(facultyRepository, times(2)).save(faculty1);
 
         when(facultyRepository.findByColorIgnoreCaseOrNameIgnoreCase(anyString(),anyString())).thenReturn(List.of(faculty1));
-        assertThat(out.findFacultyByColorOrName("test","test")).isEqualTo(List.of(faculty1));
+        assertThat(out.findFacultyByColorOrName("test")).isEqualTo(List.of(faculty1));
         verify(facultyRepository,times(1)).findByColorIgnoreCaseOrNameIgnoreCase(anyString(), anyString());
 
     }

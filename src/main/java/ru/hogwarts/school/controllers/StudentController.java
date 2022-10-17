@@ -26,11 +26,7 @@ public class StudentController {
 
     @GetMapping("{id}")
     public ResponseEntity<Student> getStudentInfo(@PathVariable Long id) {
-        Student findStudent = studentService.findStudent(id);
-        if (findStudent == null) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-        }
-        return ResponseEntity.ok(findStudent);
+        return ResponseEntity.ok(studentService.findStudent(id));
     }
 
     @GetMapping("/all")
@@ -39,6 +35,11 @@ public class StudentController {
             return ResponseEntity.ok(studentService.getAllStudentsOnFaculty(idFaculty));
         }
         return ResponseEntity.ok(studentService.getAllStudents());
+    }
+
+    @GetMapping("/{id}/faculty")
+    public ResponseEntity<Faculty> getFacultyByStudent(@PathVariable Long id) {
+        return ResponseEntity.ok(studentService.findFacultyByStudent(id));
     }
 
 
@@ -51,23 +52,29 @@ public class StudentController {
         return ResponseEntity.ok(editStudent);
     }
 
+
     @DeleteMapping("{id}")
     public ResponseEntity deleteStudent(@PathVariable Long id) {
         studentService.deleteStudent(id);
         return ResponseEntity.ok().build();
     }
 
-    @GetMapping
-    public ResponseEntity<Collection<Student>> findStudentSByAge(@RequestParam int minAge,
-                                                                 @RequestParam int maxAge) {
+    @GetMapping(params = "age")
+    public ResponseEntity<Collection<Student>> findStudentSByAge(@RequestParam (required = false) int age) {
 
+        return ResponseEntity.ok(studentService.findByAge(age));
+
+    }
+
+    @GetMapping(params = {"minAge", "maxAge"})
+    public ResponseEntity<Collection<Student>> findStudentSByBetweenAge(@RequestParam (required = false) int minAge,
+                                                                        @RequestParam (required = false) int maxAge) {
         if (minAge > 0 && maxAge >= minAge) {
             return ResponseEntity.ok(studentService.findByAgeBetween(minAge, maxAge));
 
         } else {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
-
     }
 
 }

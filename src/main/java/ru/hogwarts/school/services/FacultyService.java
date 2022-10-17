@@ -1,6 +1,7 @@
 package ru.hogwarts.school.services;
 
 import org.springframework.stereotype.Service;
+import ru.hogwarts.school.exception.FacultyNotFoundException;
 import ru.hogwarts.school.exception.StudentNotFoundException;
 import ru.hogwarts.school.models.Faculty;
 import ru.hogwarts.school.models.Student;
@@ -17,7 +18,6 @@ public class FacultyService {
     public FacultyService(FacultyRepository facultyRepository, StudentService studentService) {
         this.facultyRepository = facultyRepository;
         this.studentService = studentService;
-        ;
     }
 
 
@@ -30,19 +30,27 @@ public class FacultyService {
     }
 
     public Faculty editFaculty(Faculty faculty) {
+        Faculty editFaculty = findFaculty(faculty.getId());
+        editFaculty.setName(faculty.getName());
+        editFaculty.setColor(faculty.getColor());
         return facultyRepository.save(faculty);
+
     }
 
     public Faculty findFaculty(long id) {
-        return facultyRepository.findById(id).orElse(null);
+        return facultyRepository.findById(id).orElseThrow(() -> new FacultyNotFoundException());
     }
 
     public Collection<Faculty> getAllFaculties() {
         return List.copyOf(facultyRepository.findAll());
     }
 
-    public List<Faculty> findFacultyByColorOrName(String color, String name) {
-     return facultyRepository.findByColorIgnoreCaseOrNameIgnoreCase(color, name);
+    public List<Faculty> findFacultyByColor(String color) {
+        return List.copyOf(facultyRepository.findByColorIgnoreCase(color));
+    }
+
+    public List<Faculty> findFacultyByColorOrName(String colorOrName) {
+        return List.copyOf(facultyRepository.findByColorIgnoreCaseOrNameIgnoreCase(colorOrName, colorOrName));
     }
 
     public Faculty findFacultiesByStudents(Long id) {
@@ -51,6 +59,12 @@ public class FacultyService {
             return student.getFaculty();
         }
         throw new StudentNotFoundException();
+    }
+
+    public Collection<Student> getStudentByFaculty(long id) {
+        return facultyRepository.findById(id)
+                .map(Faculty::getStudents)
+                .orElseThrow(() -> new FacultyNotFoundException());
     }
 
 }

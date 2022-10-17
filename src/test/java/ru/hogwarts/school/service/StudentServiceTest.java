@@ -29,6 +29,9 @@ public class StudentServiceTest {
     public void positiveTest() {
         Student student1 = new Student();
         Student student2 = new Student();
+        student1.setId(1L);
+        student1.setName("test");
+        student1.setAge(22);
 
         when(studentRepository.findAll()).thenReturn(List.of());
         assertThat(out.getAllStudents()).isEmpty();
