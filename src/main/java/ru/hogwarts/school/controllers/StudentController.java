@@ -8,6 +8,7 @@ import ru.hogwarts.school.models.Student;
 import ru.hogwarts.school.services.StudentService;
 
 import java.util.Collection;
+import java.util.List;
 
 @RestController
 @RequestMapping("student")
@@ -60,21 +61,35 @@ public class StudentController {
     }
 
     @GetMapping(params = "age")
-    public ResponseEntity<Collection<Student>> findStudentSByAge(@RequestParam (required = false) int age) {
+    public ResponseEntity<Collection<Student>> findStudentSByAge(@RequestParam(required = false) int age) {
 
         return ResponseEntity.ok(studentService.findByAge(age));
 
     }
 
     @GetMapping(params = {"minAge", "maxAge"})
-    public ResponseEntity<Collection<Student>> findStudentSByBetweenAge(@RequestParam (required = false) int minAge,
-                                                                        @RequestParam (required = false) int maxAge) {
+    public ResponseEntity<Collection<Student>> findStudentSByBetweenAge(@RequestParam(required = false) int minAge,
+                                                                        @RequestParam(required = false) int maxAge) {
         if (minAge > 0 && maxAge >= minAge) {
             return ResponseEntity.ok(studentService.findByAgeBetween(minAge, maxAge));
 
         } else {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
+    }
+
+    @GetMapping("/number-of-students")
+    public ResponseEntity<Integer> getNumberOfStudents() {
+        return ResponseEntity.ok(studentService.getNumberOfStudents());
+    }
+
+    @GetMapping("/middle-age-students")
+    public ResponseEntity<Integer> getMiddleAgeOfStudents() {
+        return ResponseEntity.ok(studentService.getMiddleAgeOfStudent());
+    }
+    @GetMapping("/five-last-student")
+    public ResponseEntity<List<Student>> getLstStudents() {
+        return ResponseEntity.ok(studentService.getLastFiveStudents());
     }
 
 }

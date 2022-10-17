@@ -59,4 +59,16 @@ public class StudentService {
         return findStudent(id).getFaculty();
     }
 
+    public Integer getNumberOfStudents() {
+        return studentRepository.countAllStudents();
+    }
+
+    public Integer getMiddleAgeOfStudent() {
+        return studentRepository.getMiddleAgeOfStudent();
+    }
+
+    public List<Student> getLastFiveStudents() {
+        return List.copyOf(studentRepository.getLastFiveStudents());
+    }
+
 }
