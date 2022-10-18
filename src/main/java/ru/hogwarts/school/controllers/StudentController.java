@@ -84,7 +84,7 @@ public class StudentController {
     }
 
     @GetMapping("/middle-age-students")
-    public ResponseEntity<Integer> getMiddleAgeOfStudents() {
+    public ResponseEntity<Double> getMiddleAgeOfStudents() {
         return ResponseEntity.ok(studentService.getMiddleAgeOfStudent());
     }
     @GetMapping("/five-last-student")

@@ -63,8 +63,10 @@ public class StudentService {
         return studentRepository.countAllStudents();
     }
 
-    public Integer getMiddleAgeOfStudent() {
-        return studentRepository.getMiddleAgeOfStudent();
+    public Double getMiddleAgeOfStudent() {
+        Double result = studentRepository.getMiddleAgeOfStudent();
+        Double scale = Math.pow(10, 2);
+        return Math.ceil(result*scale)/scale;
     }
 
     public List<Student> getLastFiveStudents() {
