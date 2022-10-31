@@ -12,6 +12,7 @@ import ru.hogwarts.school.repositories.StudentRepository;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 
 @Service
@@ -61,6 +62,39 @@ public class StudentService {
         return List.copyOf(studentRepository.findAll());
     }
 
+    public List<String> getAllStudentsWithLetter(String name) {
+        logger.info("Was invoked method for get all students with name = {}", name);
+        String letter = String.valueOf(name.charAt(0)).toUpperCase();
+
+        return studentRepository.findAll().stream()
+                .map(Student::getName)
+                .map(String::toUpperCase)
+                .filter(s -> s.startsWith(letter))
+                .sorted()
+                .collect(Collectors.toList());
+    }
+
+    public Double getMiddleAge() {
+        logger.info("Was invoked method for get meddle age");
+
+        Double result = studentRepository.findAll()
+                .stream()
+                .mapToInt(Student -> Student.getAge())
+                .average()
+                .orElse(0);
+
+//           Long numberOfStudent = studentRepository.findAll().stream()
+//                     .count();
+//        Integer ageStudent = studentRepository.findAll().stream()
+//                .map(student -> student.getAge())
+//                .reduce((x, y) -> x + y)
+//                .get();
+//        Double result = (double) ageStudent / numberOfStudent;
+
+        Double scale = Math.pow(10, 2);
+        return Math.ceil(result * scale) / scale;
+    }
+
     public Collection<Student> getAllStudentsOnFaculty(Long id) {
         logger.info("Was invoked method for get all students on faculty");
         return List.copyOf(studentRepository.findStudentsByFaculty_Id(id));
@@ -90,7 +124,7 @@ public class StudentService {
         logger.info("Was invoked method for get middle age of students");
         Double result = studentRepository.getMiddleAgeOfStudents();
         Double scale = Math.pow(10, 2);
-        return Math.ceil(result*scale)/scale;
+        return Math.ceil(result * scale) / scale;
     }
 
     public List<Student> getLastFiveStudents() {

@@ -31,9 +31,13 @@ public class StudentController {
     }
 
     @GetMapping("/all")
-    public ResponseEntity<Collection<Student>> getAllStudents(@RequestParam(required = false) Long idFaculty) {
+    public ResponseEntity getAllStudents(@RequestParam(required = false) Long idFaculty,
+                                         @RequestParam(required = false) String name) {
         if (idFaculty != null) {
             return ResponseEntity.ok(studentService.getAllStudentsOnFaculty(idFaculty));
+        }
+        if (name != null) {
+            return ResponseEntity.ok(studentService.getAllStudentsWithLetter(name));
         }
         return ResponseEntity.ok(studentService.getAllStudents());
     }
@@ -83,9 +87,15 @@ public class StudentController {
         return ResponseEntity.ok(studentService.getNumberOfStudents());
     }
 
-    @GetMapping("/middle-age-students")
-    public ResponseEntity<Double> getMiddleAgeOfStudents() {
-        return ResponseEntity.ok(studentService.getMiddleAgeOfStudents());
+    @GetMapping("/middle-age-students/{version}")
+    public ResponseEntity getMiddleAgeOfStudents(@PathVariable int version) {
+        if (version == 1) {
+            return ResponseEntity.ok(studentService.getMiddleAgeOfStudents());
+        }
+        if (version == 2) {
+            return ResponseEntity.ok(studentService.getMiddleAge());
+        }
+        return ResponseEntity.ok("Выберите режим работы: 1 или 2!");
     }
     @GetMapping("/five-last-student")
     public ResponseEntity<List<Student>> getLstStudents() {

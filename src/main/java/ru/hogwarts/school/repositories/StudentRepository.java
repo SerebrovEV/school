@@ -1,6 +1,5 @@
 package ru.hogwarts.school.repositories;
 
-import org.hibernate.query.criteria.internal.expression.function.AggregationFunction;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;

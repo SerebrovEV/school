@@ -1,5 +1,6 @@
 package ru.hogwarts.school.controllers;
 
+import liquibase.pro.packaged.I;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -70,6 +71,16 @@ public class FacultyController {
     @GetMapping(params = "colorOrName")
     public ResponseEntity<List<Faculty>> findFacultiesByColorOrNAme(@RequestParam(required = false) String colorOrName) {
             return ResponseEntity.ok(facultyService.findFacultyByColorOrName(colorOrName));
+    }
+
+    @GetMapping("/longest-name-of-faculty")
+    public ResponseEntity<String> getLongestNameOfFaculty () {
+        return ResponseEntity.ok(facultyService.getLongestNameOfFaculty());
+    }
+
+    @GetMapping("/task-4-5-4")
+    public ResponseEntity<Integer> getTask4_5_4() {
+        return ResponseEntity.ok(facultyService.task4_5_4());
     }
 
 }
