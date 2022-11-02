@@ -98,8 +98,20 @@ public class StudentController {
         return ResponseEntity.ok("Выберите режим работы: 1 или 2!");
     }
     @GetMapping("/five-last-student")
-    public ResponseEntity<List<Student>> getLstStudents() {
+    public ResponseEntity<List<Student>> getLastStudents() {
         return ResponseEntity.ok(studentService.getLastFiveStudents());
+    }
+
+    @GetMapping("/six-students-out-of-order")
+    public ResponseEntity<Void> getSixStudentsOutOfOrder() {
+        studentService.getSixStudentsOutOfOrder();
+        return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/six-students-in-order")
+    public ResponseEntity<Void> getSixStudentsInOrder() {
+        studentService.getSixStudentsInOrder();
+        return ResponseEntity.ok().build();
     }
 
 }

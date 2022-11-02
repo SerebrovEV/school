@@ -79,7 +79,7 @@ public class StudentService {
 
         Double result = studentRepository.findAll()
                 .stream()
-                .mapToInt(Student -> Student.getAge())
+                .mapToInt(Student::getAge)
                 .average()
                 .orElse(0);
 
@@ -130,6 +130,47 @@ public class StudentService {
     public List<Student> getLastFiveStudents() {
         logger.info("Was invoked method for get last five students");
         return List.copyOf(studentRepository.getLastFiveStudents());
+    }
+
+    private void printStudentsRandom(int i) {
+        List<Student> listStudents = List.copyOf(studentRepository.getAllInOrder());
+        System.out.println(listStudents.get(i));
+    }
+
+    private synchronized void printStudentInOrder(int i) {
+        List<Student> listStudents = List.copyOf(studentRepository.getAllInOrder());
+        System.out.println(listStudents.get(i));
+    }
+
+    public void getSixStudentsOutOfOrder() {
+        logger.info("Was invoked method for get six students out of order");
+        Thread thread = new Thread(() -> {
+            printStudentsRandom(2); //3
+            printStudentsRandom(3); //4
+        });
+        Thread thread2 = new Thread(() -> {
+            printStudentsRandom(4); //5
+            printStudentsRandom(5); //6
+        });
+        printStudentsRandom(0); //1
+        printStudentsRandom(1); //2
+        thread.start();
+        thread2.start();
+    }
+
+    public void getSixStudentsInOrder() {
+        logger.info("Was invoked method for get six students in order");
+
+        printStudentInOrder(0); //1
+        printStudentInOrder(1); //2
+        new Thread(()->{
+            printStudentInOrder(2);
+            printStudentInOrder(3);
+        }).start();
+        new Thread(()->{
+            printStudentInOrder(4);
+            printStudentInOrder(5);
+        }).start();
     }
 
 }
