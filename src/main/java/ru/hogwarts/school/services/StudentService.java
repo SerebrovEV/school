@@ -132,45 +132,46 @@ public class StudentService {
         return List.copyOf(studentRepository.getLastFiveStudents());
     }
 
-    private void printStudentsRandom(int i) {
-        List<Student> listStudents = List.copyOf(studentRepository.getAllInOrder());
-        System.out.println(listStudents.get(i));
+    private void printStudentsRandom(List<Student> studentList, int studentNumber1) {
+        System.out.println(studentList.get(studentNumber1));
     }
 
-    private synchronized void printStudentInOrder(int i) {
-        List<Student> listStudents = List.copyOf(studentRepository.getAllInOrder());
-        System.out.println(listStudents.get(i));
+    private final Object orderForStudents = new Object();
+    private  void printStudentInOrder(List<Student> studentList, int studentNumber1, int studentNumber2) {
+        synchronized (orderForStudents) {
+            System.out.println(studentList.get(studentNumber1));
+            System.out.println(studentList.get(studentNumber2));
+        }
     }
 
     public void getSixStudentsOutOfOrder() {
         logger.info("Was invoked method for get six students out of order");
+        List<Student> listStudents = List.copyOf(studentRepository.getAllInOrder());
         Thread thread = new Thread(() -> {
-            printStudentsRandom(2); //3
-            printStudentsRandom(3); //4
+            printStudentsRandom(listStudents, 2); //3
+            printStudentsRandom(listStudents, 3); //4
         });
         Thread thread2 = new Thread(() -> {
-            printStudentsRandom(4); //5
-            printStudentsRandom(5); //6
+            printStudentsRandom(listStudents, 4); //5
+            printStudentsRandom(listStudents, 5); //6
         });
-        printStudentsRandom(0); //1
-        printStudentsRandom(1); //2
+        printStudentsRandom(listStudents, 0); //1
+        printStudentsRandom(listStudents, 1); //2
         thread.start();
         thread2.start();
     }
 
     public void getSixStudentsInOrder() {
         logger.info("Was invoked method for get six students in order");
+        List<Student> listStudents = List.copyOf(studentRepository.getAllInOrder());
 
-        printStudentInOrder(0); //1
-        printStudentInOrder(1); //2
+        printStudentInOrder(listStudents, 0, 1);
+
         new Thread(()->{
-            printStudentInOrder(2);
-            printStudentInOrder(3);
+            printStudentInOrder(listStudents, 2, 3);
         }).start();
         new Thread(()->{
-            printStudentInOrder(4);
-            printStudentInOrder(5);
+            printStudentInOrder(listStudents, 4, 5);
         }).start();
     }
-
 }
